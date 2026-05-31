@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROS2 Mastery — Roadmap & Question Bank</title>
+<style>
+:root{--bg:#0a0c10;--bg2:#111418;--bg3:#181d24;--bg4:#1e2530;--border:#252e3d;--border2:#2e3d52;--text:#dde4f0;--muted:#7a8aaa;--dim:#3d4d66;--green:#4ade80;--blue:#60a5fa;--amber:#fbbf24;--red:#f87171;--purple:#a78bfa;--cyan:#22d3ee;--mono:'JetBrains Mono',monospace;--sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.6}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{background:var(--bg2);border-bottom:1px solid var(--border);padding:32px 24px 24px;text-align:center}
+.hero-tag{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--purple);text-transform:uppercase;margin-bottom:10px}
+.hero h1{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--text);margin-bottom:6px}
+.hero-sub{color:var(--muted);font-size:13px;margin-bottom:24px}
+.hero-stats{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin-bottom:20px}
+.stat{text-align:center}
+.stat-val{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--purple)}
+.stat-label{font-size:11px;color:var(--muted);letter-spacing:.05em}
+.overall-bar{max-width:480px;margin:0 auto 8px;height:8px;background:var(--bg4);border-radius:4px;overflow:hidden;border:1px solid var(--border)}
+.overall-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));border-radius:4px;transition:width .5s}
+.overall-label{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.gh-note{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 16px;max-width:600px;margin:16px auto 0;font-size:12px;color:var(--muted);text-align:left}
+.gh-note b{color:var(--text)}
+.phase-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;position:sticky;top:0;z-index:50}
+.phase-btn{font-family:var(--mono);font-size:11px;padding:5px 14px;border:1px solid var(--border2);border-radius:4px;background:transparent;color:var(--muted);cursor:pointer;transition:all .15s}
+.phase-btn:hover{color:var(--text);border-color:var(--muted)}
+.phase-btn.active{color:var(--purple);border-color:var(--purple);background:rgba(167,139,250,.07)}
+.module-nav{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.mod-btn{font-family:var(--mono);font-size:10px;padding:4px 10px;border:1px solid var(--border);border-radius:3px;background:transparent;color:var(--dim);cursor:pointer;transition:all .12s}
+.mod-btn:hover{color:var(--muted);border-color:var(--border2)}
+.mod-btn.done{border-color:var(--green);color:var(--green)}
+.mod-btn.partial{border-color:var(--amber);color:var(--amber)}
+.content{max-width:1100px;margin:0 auto;padding:24px}
+.phase-header{font-family:var(--mono);font-size:11px;letter-spacing:.15em;color:var(--purple);text-transform:uppercase;padding:16px 0 8px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.module{background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin-bottom:20px;overflow:hidden}
+.module-head{padding:16px 20px;cursor:pointer;display:flex;align-items:center;gap:14px;user-select:none;transition:background .12s}
+.module-head:hover{background:var(--bg3)}
+.module-num{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--dim);width:32px;flex-shrink:0}
+.module-icon{font-size:20px;flex-shrink:0}
+.module-info{flex:1}
+.module-title{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--text)}
+.module-desc{font-size:12px;color:var(--muted);margin-top:2px}
+.module-right{text-align:right;flex-shrink:0}
+.mod-count{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.mod-badge{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;margin-top:3px;display:inline-block}
+.badge-ns{background:rgba(61,77,102,.4);color:var(--dim)}
+.badge-ip{background:rgba(251,191,36,.1);color:var(--amber)}
+.badge-done{background:rgba(74,222,128,.1);color:var(--green)}
+.module-chevron{color:var(--dim);font-size:11px;transition:transform .2s;flex-shrink:0}
+.module.open .module-chevron{transform:rotate(90deg)}
+.mod-bar{height:3px;background:var(--bg4);margin:0 20px}
+.mod-bar-fill{height:100%;background:var(--purple);transition:width .4s}
+.module.open .mod-bar{display:none}
+.module-body{display:none;border-top:1px solid var(--border)}
+.module.open .module-body{display:block}
+.q-table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--bg3)}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--muted);padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);text-transform:uppercase;font-weight:600}
+th:first-child{width:42px;text-align:center}
+th:nth-child(2){width:44px}
+th:nth-child(4){width:80px}
+th:nth-child(5){width:90px}
+th:last-child{width:60px}
+tbody tr{border-bottom:1px solid rgba(37,46,61,.6);transition:background .1s;cursor:pointer}
+tbody tr:hover{background:rgba(167,139,250,.03)}
+tbody tr.checked{opacity:.45}
+tbody tr:last-child{border-bottom:none}
+td{padding:9px 12px;font-size:13px;vertical-align:middle}
+td:first-child{text-align:center}
+.cb{width:16px;height:16px;border:1.5px solid var(--border2);border-radius:3px;display:inline-flex;align-items:center;justify-content:center;background:var(--bg3);transition:all .15s}
+tr.checked .cb{background:var(--purple);border-color:var(--purple)}
+.cb-check{display:none;font-size:10px;font-weight:800;color:var(--bg)}
+tr.checked .cb-check{display:block}
+.q-num{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.q-text{color:var(--text);line-height:1.5}
+tr.checked .q-text{text-decoration:line-through;color:var(--dim)}
+.tag{display:inline-block;font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;font-weight:600;letter-spacing:.04em}
+.tag-theory{background:rgba(96,165,250,.12);color:var(--blue);border:1px solid rgba(96,165,250,.25)}
+.tag-code{background:rgba(167,139,250,.12);color:var(--purple);border:1px solid rgba(167,139,250,.25)}
+.tag-debug{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.25)}
+.tag-design{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.25)}
+.diff{display:inline-block;font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;font-weight:700;letter-spacing:.04em}
+.diff-B{background:rgba(74,222,128,.1);color:var(--green)}
+.diff-I{background:rgba(251,191,36,.1);color:var(--amber)}
+.diff-A{background:rgba(248,113,113,.1);color:var(--red)}
+.issue-link{font-family:var(--mono);font-size:10px;color:var(--dim)}
+.issue-link:hover{color:var(--blue)}
+td.issue-cell{font-size:11px}
+.mod-stats{display:flex;gap:20px;padding:12px 20px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:12px}
+.ms{color:var(--muted)}
+.ms span{font-family:var(--mono);color:var(--purple);font-weight:700}
+.mod-prog-bar{flex:1;height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-top:6px;align-self:center;max-width:200px}
+.mod-prog-fill{height:100%;background:var(--purple);border-radius:3px;transition:width .4s}
+.footer{text-align:center;padding:32px;font-family:var(--mono);font-size:11px;color:var(--dim);border-top:1px solid var(--border);margin-top:20px}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+.issue-input{width:52px;font-family:var(--mono);font-size:10px;background:var(--bg3);
+  border:1px solid var(--border2);border-radius:3px;color:var(--muted);
+  padding:3px 5px;text-align:center;outline:none;}
+.issue-input:focus{border-color:var(--cyan);color:var(--text);}
+.issue-open{display:block;font-family:var(--mono);font-size:9px;
+  color:var(--dim);text-decoration:none;margin-top:2px;text-align:center;}
+.issue-open.active{color:var(--blue);}
+.issue-open.active:hover{text-decoration:underline;}
+
+.issue-input{width:52px;font-family:var(--mono);font-size:10px;background:var(--bg3);
+  border:1px solid var(--border2);border-radius:3px;color:var(--muted);
+  padding:3px 5px;text-align:center;outline:none;}
+.issue-input:focus{border-color:var(--cyan);color:var(--text);}
+.issue-open{display:block;font-family:var(--mono);font-size:9px;color:var(--dim);
+  text-decoration:none;margin-top:2px;text-align:center;}
+.issue-open.active{color:var(--blue);}
+.issue-open.active:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-tag">// complete mastery path</div>
+  <h1>ROS2 ROADMAP</h1>
+  <div class="hero-sub">FROM FIRST NODE TO AUTONOMOUS ROBOT · EVERY CONCEPT · FULL QUESTION BANK</div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-val" id="s-modules">25</div><div class="stat-label">Modules</div></div>
+    <div class="stat"><div class="stat-val" id="s-total">0</div><div class="stat-label">Questions</div></div>
+    <div class="stat"><div class="stat-val">3</div><div class="stat-label">Phases</div></div>
+    <div class="stat"><div class="stat-val">∞</div><div class="stat-label">Extra drills</div></div>
+  </div>
+  <div style="color:var(--muted);font-size:12px;margin-bottom:16px">
+    Foundation — 15 Qs/module &nbsp;·&nbsp; Intermediate — 20 Qs &nbsp;·&nbsp; Advanced — 25 Qs
+  </div>
+  <div class="overall-bar"><div class="overall-fill" id="overall-fill" style="width:0%"></div></div>
+  <div class="overall-label">
+    <b id="done-count">0</b> / <b id="total-count">0</b> questions done &nbsp;
+    <b id="pct-label">0%</b> overall &nbsp;
+    <b id="mod-done">0</b> / <b id="mod-total">25</b> modules complete
+  </div>
+  <div class="gh-note">
+    <b>GitHub sync:</b> Export progress JSON → commit to your repo →
+    GitHub Actions updates README badges automatically.
+    Progress key: <code>ros2_mastery_v1</code> (browser localStorage)
+  </div>
+</div>
+
+<nav class="phase-nav">
+  <button class="phase-btn active" onclick="filterPhase(0)">All phases</button>
+  <button class="phase-btn" onclick="filterPhase(1)">Phase 01 · Foundation</button>
+  <button class="phase-btn" onclick="filterPhase(2)">Phase 02 · Intermediate</button>
+  <button class="phase-btn" onclick="filterPhase(3)">Phase 03 · Advanced</button>
+</nav>
+
+<div class="module-nav" id="mod-nav"></div>
+<div class="content" id="content"></div>
+<div class="footer">ROS2 MASTERY · 25 MODULES · BUILD. SPIN. DEBUG. NAVIGATE.</div>
+
+<script>
+const SKEY = 'ros2_mastery_v1';
+const GH_REPO = 'Srivathsan98/ROS2-Mastery';
+
+const MODULES = [
+// ═══════════════════════════════════════════════════════════
+// PHASE 1 — FOUNDATION
+// ═══════════════════════════════════════════════════════════
+{
+  id:'m01',phase:1,num:'01',icon:'🧱',title:'ROS2 Architecture & Core Concepts',
+  desc:'DDS middleware, RMW, graph concepts, workspace setup, colcon, ament.',
+  qs:[
+    ['What is ROS2? How does it differ architecturally from ROS1?','T','B'],
+    ['What is DDS (Data Distribution Service)? Why did ROS2 choose it over ROSTCP?','T','B'],
+    ['What is the RMW (ROS Middleware) abstraction layer?','T','B'],
+    ['Name three RMW implementations and their trade-offs.','T','B'],
+    ['What is a ROS2 workspace? What is the difference between src, build, install, log?','T','B'],
+    ['What does colcon build do? What is --symlink-install?','C','B'],
+    ['What is source install/setup.bash and why must you run it?','C','B'],
+    ['What is ament_cmake? How does it differ from plain CMake?','T','B'],
+    ['What is ament_python? When would you choose it over ament_cmake?','T','B'],
+    ['What is a ROS2 package? What files must it contain?','T','B'],
+    ['What is the ROS2 graph? What are its key entities?','T','B'],
+    ['How do you list all running nodes, topics, services, and actions?','C','B'],
+    ['What is the ROS_DOMAIN_ID and what does it control?','T','B'],
+    ['How do you set ROS_DOMAIN_ID to isolate two robot systems on the same network?','C','B'],
+    ['What is the difference between ros2 run and ros2 launch?','T','B'],
+    ['What is colcon test? How do you run tests for a specific package?','C','I'],
+    ['What is an ament_cmake package that depends on a Python package? How do you express that?','C','I'],
+    ['How do you add a custom message type dependency in package.xml and CMakeLists.txt?','C','I'],
+    ['What does colcon graph show? How is it useful for debugging build order?','C','I'],
+    ['What is the difference between --packages-select and --packages-up-to in colcon?','T','I'],
+  ]
+},
+{
+  id:'m02',phase:1,num:'02',icon:'📡',title:'Nodes, Topics & Publishers/Subscribers',
+  desc:'Node creation, publishers, subscriptions, message types, QoS basics.',
+  qs:[
+    ['What is a ROS2 node? What is the minimal code to create one in C++?','C','B'],
+    ['How do you create a publisher in rclcpp? What arguments does create_publisher take?','C','B'],
+    ['How do you create a subscription in rclcpp? What is the callback signature?','C','B'],
+    ['What is a topic? What is the naming convention for topics?','T','B'],
+    ['How do you publish a std_msgs/msg/String message from a node?','C','B'],
+    ['How do you echo a topic from the command line?','C','B'],
+    ['How do you remap a topic name at launch time?','C','B'],
+    ['What is topic introspection? How do you see the type of a topic?','C','B'],
+    ['How do you check the publish rate of a topic with ros2 topic hz?','C','B'],
+    ['What is the difference between spin() and spin_some()?','T','B'],
+    ['What is a QoS profile? Name the four main QoS policies.','T','B'],
+    ['What is RELIABLE vs BEST_EFFORT reliability QoS? When do you use each?','T','B'],
+    ['What is VOLATILE vs TRANSIENT_LOCAL durability? When does it matter?','T','B'],
+    ['How do you set QoS depth (history) for a subscription?','C','B'],
+    ['What happens when publisher and subscriber QoS policies are incompatible?','T','B'],
+    ['How do you create a node with multiple publishers and subscriptions?','C','I'],
+    ['What is node name mangling? How do you use __node and __ns remapping?','T','I'],
+    ['How do you use ros2 topic pub to inject messages for testing?','C','I'],
+    ['What is a latched topic equivalent in ROS2?','T','I'],
+    ['How do you measure end-to-end latency between two topics?','C','I'],
+  ]
+},
+{
+  id:'m03',phase:1,num:'03',icon:'🔧',title:'Services & Actions',
+  desc:'Synchronous services, asynchronous actions, goal/feedback/result, CLI usage.',
+  qs:[
+    ['What is a ROS2 service? How does it differ from a topic?','T','B'],
+    ['How do you create a service server in rclcpp?','C','B'],
+    ['How do you create a service client in rclcpp and call it synchronously?','C','B'],
+    ['How do you call a service from the command line with ros2 service call?','C','B'],
+    ['What is a .srv file? Write an example for adding two integers.','C','B'],
+    ['What is a ROS2 action? What three message types does it use?','T','B'],
+    ['What is the difference between a service and an action?','T','B'],
+    ['How do you create an action server in rclcpp?','C','B'],
+    ['How do you create an action client and send a goal?','C','B'],
+    ['How do you send feedback from an action server?','C','B'],
+    ['How do you cancel a running action goal?','C','B'],
+    ['What is a .action file? Write an example for a navigation goal.','C','B'],
+    ['How do you handle the case where a service call times out?','C','I'],
+    ['What is an asynchronous service call in rclcpp? How does it work with futures?','C','I'],
+    ['What happens if an action goal is rejected? How do you handle it client-side?','T','I'],
+    ['How do you list available services and actions from the command line?','C','B'],
+    ['What is the difference between send_goal and send_goal_async in rclcpp actions?','T','I'],
+    ['How do you implement action preemption (replacing a goal with a new one)?','C','I'],
+    ['Debug: service call hangs indefinitely. What are the common causes?','D','I'],
+    ['How do you write a test for a service server using rclcpp?','C','I'],
+  ]
+},
+{
+  id:'m04',phase:1,num:'04',icon:'⚙️',title:'Parameters',
+  desc:'Parameter declaration, get/set, parameter events, launch file params, YAML.',
+  qs:[
+    ['What is a ROS2 parameter? How does it differ from ROS1 param server?','T','B'],
+    ['How do you declare a parameter in rclcpp with a default value?','C','B'],
+    ['How do you get a parameter value in a node?','C','B'],
+    ['How do you set a parameter from the command line?','C','B'],
+    ['How do you list all parameters of a running node?','C','B'],
+    ['What is a parameter descriptor? What can you set with it?','T','B'],
+    ['How do you load parameters from a YAML file in a launch file?','C','B'],
+    ['What is the format of a ROS2 parameters YAML file?','C','B'],
+    ['How do you use an on_set_parameters_callback to validate parameter changes?','C','I'],
+    ['What is the difference between declare_parameter and set_parameter?','T','B'],
+    ['How do you use ros2 param dump to save current parameters to file?','C','I'],
+    ['How do you pass parameters via the command line with --ros-args -p?','C','B'],
+    ['What is a global parameter (/) vs a node-local parameter?','T','I'],
+    ['How do you dynamically reconfigure parameters at runtime in rclcpp?','C','I'],
+    ['What is ParameterEventHandler? How do you subscribe to parameter changes?','C','I'],
+    ['How do you share parameters between multiple nodes in a launch file?','C','I'],
+    ['Debug: parameter not found at runtime despite setting in YAML. Why?','D','I'],
+    ['How do you use rcl_interfaces/msg/ParameterEvent?','T','I'],
+    ['What are read-only parameters? How do you declare one?','C','I'],
+    ['How do you implement a parameter callback that rejects out-of-range values?','C','I'],
+  ]
+},
+{
+  id:'m05',phase:1,num:'05',icon:'🚀',title:'Launch System',
+  desc:'Python launch files, node composition, arguments, conditions, includes.',
+  qs:[
+    ['What is a ROS2 launch file? Why is Python preferred over XML?','T','B'],
+    ['What is the minimal Python launch file to start two nodes?','C','B'],
+    ['How do you pass arguments to a launch file?','C','B'],
+    ['How do you use LaunchConfiguration and DeclareLaunchArgument?','C','B'],
+    ['How do you conditionally launch a node based on a launch argument?','C','B'],
+    ['How do you include another launch file from a launch file?','C','B'],
+    ['How do you set environment variables in a launch file?','C','B'],
+    ['How do you remap topics inside a launch file for a specific node?','C','B'],
+    ['What is a ComposableNodeContainer? How do you launch composable nodes?','C','I'],
+    ['What is GroupAction? What does it do for namespacing?','T','I'],
+    ['How do you push a namespace onto all nodes in a launch file group?','C','I'],
+    ['What is an OpaqueFunction in a launch file? When is it needed?','C','I'],
+    ['How do you use SetEnvironmentVariable in a launch file?','C','I'],
+    ['What is ExecuteProcess? How do you run a non-ROS command in a launch file?','C','I'],
+    ['How do you add a respawn policy to a node in a launch file?','C','I'],
+    ['How do you pass a YAML parameter file path as a launch argument?','C','B'],
+    ['Debug: launch file starts but a node immediately dies. How do you diagnose?','D','I'],
+    ['How do you use RegisterEventHandler and OnProcessExit in a launch file?','C','I'],
+    ['What is the difference between launch_ros.actions.Node and launch.actions.Node?','T','I'],
+    ['How do you create a launch file that supports both simulation and real hardware?','C','I'],
+  ]
+},
+
+// ═══════════════════════════════════════════════════════════
+// PHASE 2 — INTERMEDIATE
+// ═══════════════════════════════════════════════════════════
+{
+  id:'m06',phase:2,num:'06',icon:'🏗️',title:'Node Lifecycle & Executors',
+  desc:'Lifecycle nodes, managed nodes, executors, callback groups, real-time.',
+  qs:[
+    ['What is a lifecycle node? What states does it have?','T','B'],
+    ['What are the transitions in a lifecycle node state machine?','T','B'],
+    ['How do you implement on_configure, on_activate, on_deactivate callbacks?','C','I'],
+    ['What is the LifecycleManager in Nav2? What does it do?','T','I'],
+    ['What is a SingleThreadedExecutor vs MultiThreadedExecutor?','T','B'],
+    ['What is a StaticSingleThreadedExecutor? When is it preferred?','T','I'],
+    ['What is a callback group? What are the two types?','T','I'],
+    ['What is the difference between MutuallyExclusive and Reentrant callback groups?','T','I'],
+    ['How do you assign a subscriber to a specific callback group?','C','I'],
+    ['Why does a service call inside a subscriber callback deadlock in single-threaded executor?','T','I'],
+    ['How do you fix the callback deadlock using a MultiThreadedExecutor and Reentrant group?','C','I'],
+    ['What is intra-process communication in ROS2? What is required to enable it?','T','I'],
+    ['How do you use unique_ptr messages for zero-copy intra-process?','C','I'],
+    ['What is a ComposableNode? What are the advantages over separate processes?','T','I'],
+    ['How do you load and unload composable nodes at runtime?','C','I'],
+    ['What is NodeOptions? What can you configure with it?','T','I'],
+    ['How do you spin a node from within a thread pool using a MultiThreadedExecutor?','C','I'],
+    ['Debug: node callbacks stop executing. Executor is running. What went wrong?','D','I'],
+    ['How do you use rclcpp::WallTimer vs rclcpp::GenericTimer?','T','I'],
+    ['What is the real-time executor (rclcpp::executors::EventsExecutor)?','T','A'],
+  ]
+},
+{
+  id:'m07',phase:2,num:'07',icon:'🔨',title:'Custom Messages, Services & Actions',
+  desc:'MSG/SRV/ACTION definitions, rosidl, dependencies, versioning.',
+  qs:[
+    ['What is rosidl? What does it generate from .msg files?','T','B'],
+    ['What primitive types are available in ROS2 .msg files?','T','B'],
+    ['How do you define a custom .msg with an array field and a header?','C','B'],
+    ['How do you add a custom message package as a dependency in CMakeLists.txt?','C','B'],
+    ['What is the rosidl_generate_interfaces macro?','C','B'],
+    ['How do you use a custom message type in a C++ node?','C','B'],
+    ['What is the purpose of the std_msgs/msg/Header field? What does it contain?','T','B'],
+    ['What is a bounded array vs unbounded array in a ROS2 message?','T','I'],
+    ['What is a bounded string in a ROS2 message?','T','I'],
+    ['How do you define constants in a .msg file?','C','I'],
+    ['What is the difference between action feedback and action result?','T','B'],
+    ['How do you handle partial results in a long-running action?','C','I'],
+    ['What are common_interfaces? Name five packages and their use.','T','I'],
+    ['How do you evolve a message type without breaking existing nodes?','T','I'],
+    ['What is type adaptation (TypeAdapter) in ROS2 Humble+?','T','A'],
+    ['How do you use message_filters::TimeSynchronizer for multiple topics?','C','I'],
+    ['What is an ApproximateTimeSynchronizer? When is it needed?','C','I'],
+    ['Debug: rosidl generation fails at build. Common causes?','D','I'],
+    ['How do you share a custom message package across multiple repositories?','T','I'],
+    ['What is the impact of message size on DDS throughput?','T','I'],
+  ]
+},
+{
+  id:'m08',phase:2,num:'08',icon:'📐',title:'TF2 — Transform Library',
+  desc:'Transform tree, broadcasters, listeners, lookupTransform, common frames, debugging.',
+  qs:[
+    ['What is TF2? What problem does it solve in robotics?','T','B'],
+    ['What is the transform tree? What is a parent frame and child frame?','T','B'],
+    ['What are the standard ROS2 coordinate frames: map, odom, base_link?','T','B'],
+    ['What is the difference between a static and dynamic transform?','T','B'],
+    ['How do you publish a static transform using StaticTransformBroadcaster?','C','B'],
+    ['How do you publish a dynamic transform using TransformBroadcaster?','C','B'],
+    ['How do you look up a transform between two frames using tf2_ros::Buffer?','C','B'],
+    ['What is the purpose of waitForTransform? How do you use it?','C','B'],
+    ['What is tf2::doTransform? How do you transform a geometry_msgs::PointStamped?','C','B'],
+    ['How do you visualize the TF tree in rviz2?','C','B'],
+    ['What is tf2_echo? How do you use it to debug a specific transform?','C','B'],
+    ['What does view_frames generate? How do you create the PDF?','C','B'],
+    ['What is rqt_tf_tree? How is it more useful than view_frames?','C','B'],
+    ['Debug: "could not find a connection between frames". What does it mean?','D','I'],
+    ['Debug: "extrapolation into the future" error. Why does it happen?','D','I'],
+    ['What is the tf2 buffer duration? How do you set it to avoid extrapolation errors?','C','I'],
+    ['How does TF2 handle the case where a transform is published at variable rates?','T','I'],
+    ['What is a tf2::TransformException? How do you handle it gracefully?','C','I'],
+    ['How do you transform a laser scan point cloud from sensor frame to map frame?','C','I'],
+    ['How do you implement a TF2 broadcaster for a robot with a moving arm?','C','I'],
+  ]
+},
+{
+  id:'m09',phase:2,num:'09',icon:'🗺️',title:'Nav2 — Navigation Stack',
+  desc:'Nav2 architecture, costmaps, planners, controllers, recovery behaviors.',
+  qs:[
+    ['What is Nav2? What are its main components?','T','B'],
+    ['What is the role of the BT Navigator in Nav2?','T','I'],
+    ['What is a costmap? What is the difference between global and local costmap?','T','B'],
+    ['What are costmap layers? Name four common ones.','T','B'],
+    ['What is the inflation layer? What does it do?','T','B'],
+    ['What is the obstacle layer? How does it handle sensor data?','T','B'],
+    ['How do you configure costmap resolution and size?','C','I'],
+    ['What is the NavFn global planner? What algorithm does it use?','T','B'],
+    ['What is the Smac Planner? What algorithms does it offer?','T','I'],
+    ['What is DWB (Dynamic Window Approach with B)?','T','I'],
+    ['What is Regulated Pure Pursuit (RPP)? How does it improve on classic pure pursuit?','T','I'],
+    ['What is TEB (Timed Elastic Band)? When is it preferred over DWB?','T','I'],
+    ['How do you tune the RPP controller for a differential drive robot?','C','I'],
+    ['What is AMCL? How does it use a particle filter for localization?','T','I'],
+    ['What does map_server do? How do you load and save maps?','C','B'],
+    ['How do you send a NavigateToPose goal from the command line?','C','B'],
+    ['What is the LifecycleManager in Nav2? Why are nodes managed?','T','I'],
+    ['What are Nav2 recovery behaviors? Name three built-in ones.','T','I'],
+    ['Debug: robot reaches goal but nav2 reports failure. Why?','D','I'],
+    ['How do you add a custom costmap layer plugin?','C','A'],
+  ]
+},
+{
+  id:'m10',phase:2,num:'10',icon:'🧭',title:'SLAM & Mapping',
+  desc:'slam_toolbox, cartographer_ros, RTAB-Map, map formats, loop closure.',
+  qs:[
+    ['What is SLAM? What does it solve simultaneously?','T','B'],
+    ['What sensors are commonly used for 2D SLAM?','T','B'],
+    ['What is slam_toolbox? How do you launch it in online async mode?','C','B'],
+    ['What is the difference between online, offline, and lifelong mapping in slam_toolbox?','T','I'],
+    ['How do you save and load a map in slam_toolbox?','C','B'],
+    ['What is loop closure? Why is it important for map consistency?','T','I'],
+    ['What is cartographer_ros? How does it compare to slam_toolbox?','T','I'],
+    ['What is RTAB-Map? What sensors does it support?','T','I'],
+    ['What is a pose graph? How does slam_toolbox use it?','T','I'],
+    ['What is scan matching? What algorithm does slam_toolbox use?','T','I'],
+    ['How do you tune slam_toolbox for a noisy LiDAR?','C','I'],
+    ['What is the map_saver_cli tool? How do you use it?','C','B'],
+    ['What format is a ROS2 map? What do the .pgm and .yaml files contain?','T','B'],
+    ['What is VSLAM? Name two VSLAM systems compatible with ROS2.','T','I'],
+    ['How do you run RTAB-Map with an RGB-D camera and save a 3D map?','C','I'],
+    ['What is LIO-SAM? What sensors does it fuse?','T','I'],
+    ['How do you integrate a 3D LiDAR with slam_toolbox using LaserScan projection?','C','A'],
+    ['What is the impact of LiDAR scan rate on SLAM accuracy?','T','I'],
+    ['Debug: map has duplicate walls or drift. What are the likely causes?','D','I'],
+    ['What is a submapping strategy? How does cartographer use it?','T','A'],
+  ]
+},
+{
+  id:'m11',phase:2,num:'11',icon:'📍',title:'Localization & State Estimation',
+  desc:'AMCL, robot_localization, EKF/UKF, IMU fusion, odometry.',
+  qs:[
+    ['What is the difference between localization and SLAM?','T','B'],
+    ['What is AMCL? What inputs does it require?','T','B'],
+    ['What is the particle filter algorithm used in AMCL?','T','I'],
+    ['How do you initialize AMCL pose from a known position?','C','I'],
+    ['What is robot_localization? What filters does it support?','T','B'],
+    ['How do you configure robot_localization to fuse wheel odometry and IMU?','C','I'],
+    ['What is the EKF node in robot_localization? What frames does it operate between?','T','I'],
+    ['What is the odom frame? How does it differ from map frame?','T','B'],
+    ['How do you handle IMU data in robot_localization? What covariances matter?','C','I'],
+    ['What is the difference between sensor_timeout and transform_timeout in robot_localization?','T','I'],
+    ['How do you diagnose a robot_localization covariance explosion?','D','I'],
+    ['What is the NavSatTransform node in robot_localization?','T','I'],
+    ['How do you fuse GPS data with wheel odometry in robot_localization?','C','A'],
+    ['What is the impact of wrong IMU orientation on EKF output?','D','I'],
+    ['How do you use imu_tools to correct IMU bias and orientation?','C','I'],
+    ['What is the wheel_odometry_topic and which message type is expected?','T','B'],
+    ['How do you use the UKF vs EKF? What is the practical difference?','T','I'],
+    ['Debug: robot position drifts to the side despite correct odometry. Cause?','D','I'],
+    ['What is the initial_estimate_covariance in robot_localization?','T','I'],
+    ['How do you verify localization quality using visualization in rviz2?','C','I'],
+  ]
+},
+{
+  id:'m12',phase:2,num:'12',icon:'🔵',title:'Perception in ROS2',
+  desc:'Point clouds, image pipeline, depth processing, PCL, sensor_msgs.',
+  qs:[
+    ['What is sensor_msgs/msg/PointCloud2? What fields does it have?','T','B'],
+    ['How do you subscribe to a PointCloud2 topic and access XYZ data?','C','B'],
+    ['What is pcl_conversions? How do you convert between PCL and ROS2 messages?','C','B'],
+    ['What is a LaserScan message? What are its key fields?','T','B'],
+    ['How do you convert a LaserScan to a PointCloud2?','C','I'],
+    ['What is sensor_msgs/msg/Image? What is sensor_msgs/msg/CompressedImage?','T','B'],
+    ['What is image_transport? Why is it preferred over raw topic subscriptions?','T','I'],
+    ['What is camera_info? What calibration data does it contain?','T','B'],
+    ['How do you use depth_image_proc to generate a point cloud from depth + RGB?','C','I'],
+    ['What is the cv_bridge package? How do you convert between ROS2 Image and cv::Mat?','C','B'],
+    ['How do you apply a voxel grid filter to a PointCloud2 with PCL?','C','I'],
+    ['What is a PassThrough filter in PCL? How do you use it in ROS2?','C','I'],
+    ['How do you publish object detection results using vision_msgs?','C','I'],
+    ['What is Detection2DArray? What fields does it have?','T','I'],
+    ['How do you use message_filters to synchronize RGB and depth topics?','C','I'],
+    ['What is the republish tool in image_transport? How do you use it?','C','I'],
+    ['How do you implement a depth-based obstacle detector in ROS2?','C','I'],
+    ['What is the pointcloud_to_laserscan package?','T','I'],
+    ['Debug: point cloud topic published but rviz2 shows nothing. Checklist?','D','I'],
+    ['How do you reduce point cloud size before publishing to save bandwidth?','C','I'],
+  ]
+},
+{
+  id:'m13',phase:2,num:'13',icon:'🤖',title:'rclpy — Python Client Library',
+  desc:'Python nodes, async patterns, executors, threading, integration with other libs.',
+  qs:[
+    ['How do you create a minimal ROS2 node in Python with rclpy?','C','B'],
+    ['How do you create a publisher and subscriber in rclpy?','C','B'],
+    ['How do you create a service server in rclpy?','C','B'],
+    ['How do you call a service asynchronously in rclpy?','C','B'],
+    ['How do you use rclpy.spin_once() vs rclpy.spin()?','T','B'],
+    ['What is the MultiThreadedExecutor in rclpy?','T','I'],
+    ['How do you use a callback group in rclpy to allow concurrent callbacks?','C','I'],
+    ['How do you use rclpy with asyncio?','C','I'],
+    ['How do you use threading.Thread alongside rclpy.spin()?','C','I'],
+    ['How do you create a lifecycle node in rclpy?','C','I'],
+    ['What is rclpy.Parameter? How do you declare and use parameters in Python?','C','B'],
+    ['How do you use timer callbacks in rclpy?','C','B'],
+    ['How do you handle node shutdown gracefully in rclpy?','C','B'],
+    ['How do you use rclpy with NumPy for efficient array handling?','C','I'],
+    ['How do you bridge rclpy with OpenCV for image processing?','C','I'],
+    ['What is rclpy.logging? How do you use the different log levels?','C','B'],
+    ['How do you write a Python launch file that starts a rclpy node?','C','B'],
+    ['Debug: rclpy callback is never called. What are common causes?','D','I'],
+    ['How do you profile a rclpy node for CPU and memory usage?','C','I'],
+    ['How do you package a Python ROS2 node for distribution?','C','I'],
+  ]
+},
+
+// ═══════════════════════════════════════════════════════════
+// PHASE 3 — ADVANCED
+// ═══════════════════════════════════════════════════════════
+{
+  id:'m14',phase:3,num:'14',icon:'🌳',title:'Behavior Trees & Task Planning',
+  desc:'BehaviorTree.CPP, Nav2 BT navigator, custom BT nodes, groot2.',
+  qs:[
+    ['What is a Behavior Tree? How does it differ from a state machine?','T','I'],
+    ['What are the four main BT node types?','T','I'],
+    ['What is a Sequence node? What is a Fallback (Selector) node?','T','I'],
+    ['What is a Decorator node? Give two examples.','T','I'],
+    ['What does BehaviorTree.CPP provide? How does Nav2 use it?','T','I'],
+    ['How do you write a custom Action node in BehaviorTree.CPP?','C','I'],
+    ['How do you write a custom Condition node?','C','I'],
+    ['What is a Blackboard in a BT? How do you read/write values?','C','I'],
+    ['How does Nav2 use BTs for navigation? What is the default BT XML file?','T','I'],
+    ['How do you replace the default Nav2 BT with a custom one in launch?','C','I'],
+    ['What is Groot2? How do you use it to visualize and edit a BT?','T','I'],
+    ['How do you add a Recovery behavior into a Nav2 BT?','C','A'],
+    ['What is a SubTree node? When would you use it?','T','A'],
+    ['How do you handle BT ticking rate vs ROS2 spin rate?','T','A'],
+    ['What is ReactiveSequence vs Sequence? When does the difference matter?','T','A'],
+    ['How do you unit test a custom BT node?','C','A'],
+    ['Debug: Nav2 navigation fails silently mid-tree. How do you debug?','D','A'],
+    ['How do you implement a docking behavior as a BT subtree?','C','A'],
+    ['What is the Nav2 BT waypoint follower? How does it differ from NavigateToPose?','T','A'],
+    ['How do you implement a patrol loop using a cyclic BT?','C','A'],
+    ['What are the trade-offs of BTs vs hierarchical state machines (HFSM) for robot tasks?','T','A'],
+    ['How do you pass dynamic goal poses into a Nav2 BT?','C','A'],
+    ['What is a BT port? How do you define input and output ports?','C','A'],
+    ['How do you implement a multi-robot coordination strategy using BTs?','T','A'],
+    ['What is a KeepRunningUntilFailure decorator?','T','A'],
+  ]
+},
+{
+  id:'m15',phase:3,num:'15',icon:'🦾',title:'MoveIt2 — Motion Planning',
+  desc:'MoveIt2 architecture, URDF/SRDF, OMPL, Cartesian planning, collision, servo.',
+  qs:[
+    ['What is MoveIt2? What problem does it solve?','T','I'],
+    ['What is the planning scene? What does it contain?','T','I'],
+    ['What is a MoveGroupInterface? How do you use it to plan and execute?','C','I'],
+    ['What is SRDF? What does it define that URDF does not?','T','I'],
+    ['What are planning groups? How are they defined in SRDF?','T','I'],
+    ['What is OMPL? Name three planners it provides.','T','I'],
+    ['How do you plan to a joint-space goal with MoveGroupInterface?','C','I'],
+    ['How do you plan to a Cartesian (pose) goal?','C','I'],
+    ['What is Cartesian path planning? How do you compute a straight-line end-effector path?','C','I'],
+    ['What is the allowed_planning_time parameter?','T','I'],
+    ['How does MoveIt2 handle collision checking?','T','I'],
+    ['What is an allowed collision matrix (ACM)?','T','I'],
+    ['How do you add a collision object to the planning scene?','C','I'],
+    ['What is the moveit_servo package? What is it used for?','T','I'],
+    ['How do you implement real-time Cartesian servo control with moveit_servo?','C','A'],
+    ['What is KDL kinematics plugin? What is IKFast?','T','A'],
+    ['How do you integrate a custom IK solver into MoveIt2?','C','A'],
+    ['What is grasp planning in MoveIt2? How does it work?','T','A'],
+    ['Debug: MoveIt2 planning succeeds but execution fails. Common causes?','D','A'],
+    ['How do you set joint constraints or path constraints in planning?','C','A'],
+    ['What is MoveIt2 Task Constructor (MTC)?','T','A'],
+    ['How do you implement a pick-and-place pipeline using MTC?','C','A'],
+    ['What is the difference between position only IK and full pose IK?','T','A'],
+    ['How do you benchmark different planners in MoveIt2?','C','A'],
+    ['What is the pilz_industrial_motion_planner? When is it preferred over OMPL?','T','A'],
+  ]
+},
+{
+  id:'m16',phase:3,num:'16',icon:'📊',title:'ROS2 Performance & Real-Time',
+  desc:'DDS tuning, QoS, real-time executor, PREEMPT_RT, latency measurement.',
+  qs:[
+    ['What factors affect end-to-end latency in a ROS2 pub/sub chain?','T','I'],
+    ['How do you measure publish-to-callback latency in ROS2?','C','I'],
+    ['What is the rclcpp::PublisherOptions::event_callbacks mechanism?','T','A'],
+    ['How does DDS discovery affect node startup time? How do you mitigate it?','T','I'],
+    ['What is cyclone DDS vs Fast DDS — key performance differences?','T','I'],
+    ['How do you configure Fast DDS QoS XML for low-latency operation?','C','A'],
+    ['What is the ros2_tracing package? How do you use it?','C','A'],
+    ['What is LTTng? How do you use it with ros2_tracing?','C','A'],
+    ['What is a ROS2 real-time executor? What does it provide over standard?','T','A'],
+    ['How do you use PREEMPT_RT with a ROS2 node for deterministic timing?','T','A'],
+    ['How do you set CPU affinity and real-time priority for a ROS2 node?','C','A'],
+    ['What is memory pre-allocation for real-time ROS2? How do you implement it?','T','A'],
+    ['What is rclcpp::AnyExecutable and how does the executor select callbacks?','T','A'],
+    ['How do you avoid dynamic memory allocation in a real-time ROS2 callback?','T','A'],
+    ['What is the Pendulum demo in ROS2? What does it demonstrate?','T','A'],
+    ['How do you profile DDS serialization/deserialization overhead?','T','A'],
+    ['What is DDS shared memory transport? How do you enable it in CycloneDDS?','T','A'],
+    ['How do you isolate a CPU for a real-time ROS2 node using isolcpus?','C','A'],
+    ['Debug: callback jitter exceeds 1ms on a PREEMPT_RT system. Investigation?','D','A'],
+    ['What is the impact of ROS2 logging on real-time performance?','T','A'],
+    ['How do you use ros2doctor to diagnose performance issues?','C','I'],
+    ['What is the EventsExecutor introduced in Iron/Humble?','T','A'],
+    ['How do you measure the cost of a single DDS message at different sizes?','C','A'],
+    ['What is the difference between intra-process and inter-process communication latency?','T','I'],
+    ['How do you set the SCHED_FIFO priority for a ROS2 node in C++?','C','A'],
+  ]
+},
+{
+  id:'m17',phase:3,num:'17',icon:'🧪',title:'Testing in ROS2',
+  desc:'launch_testing, gtest, pytest, mock nodes, integration tests.',
+  qs:[
+    ['What testing frameworks does ROS2 support?','T','I'],
+    ['How do you write a C++ unit test with GTest for a ROS2 node?','C','I'],
+    ['How do you write a Python unit test with pytest for a ROS2 node?','C','I'],
+    ['What is launch_testing? How does it differ from unit testing?','T','I'],
+    ['How do you write an integration test using launch_testing?','C','I'],
+    ['What is ReadyToTest in launch_testing?','T','I'],
+    ['How do you use a mock node to inject fake sensor data for testing?','C','I'],
+    ['How do you test a service server using rclcpp in a GTest?','C','I'],
+    ['How do you test a lifecycle node state machine?','C','I'],
+    ['How do you run colcon test and view results?','C','B'],
+    ['What is ament_lint_auto? What does it enforce?','T','I'],
+    ['How do you use ament_cmake_gtest for test registration?','C','I'],
+    ['How do you measure test coverage for a ROS2 C++ node?','C','A'],
+    ['What is rosbag2? How do you record and replay topics for testing?','C','I'],
+    ['How do you use a recorded bag for regression testing in CI?','C','A'],
+    ['What is the ros2bag Python API for programmatic bag access?','C','A'],
+    ['How do you write a test that verifies TF transforms are published correctly?','C','A'],
+    ['How do you simulate time in ROS2 tests using use_sim_time?','C','I'],
+    ['Debug: launch_testing hangs and never completes. Common causes?','D','I'],
+    ['How do you integrate ROS2 tests into a GitHub Actions CI pipeline?','C','A'],
+    ['What is the ros_testing package?','T','I'],
+    ['How do you test Nav2 navigation in simulation without real hardware?','C','A'],
+    ['What is parameter_blackboard? How is it used in tests?','T','A'],
+    ['How do you test that an action server correctly handles goal cancellation?','C','A'],
+    ['How do you measure test suite execution time and identify slow tests?','C','A'],
+  ]
+},
+{
+  id:'m18',phase:3,num:'18',icon:'🐛',title:'Debugging & Introspection',
+  desc:'rqt tools, ros2 CLI, rosbag2, topic statistics, DDS logging.',
+  qs:[
+    ['What rqt plugins are most useful for debugging a ROS2 system?','T','B'],
+    ['How do you use rqt_graph to visualize the node-topic graph?','C','B'],
+    ['How do you use rqt_console to filter and search log messages?','C','B'],
+    ['What is rqt_plot? How do you plot a numeric field from a topic?','C','B'],
+    ['How do you use ros2 topic echo --once to capture a single message?','C','B'],
+    ['How do you record a subset of topics with rosbag2?','C','B'],
+    ['How do you replay a bag with clock at different speeds?','C','I'],
+    ['What is ros2 bag info? What does it show?','C','B'],
+    ['How do you convert a ROS2 bag to ROS1 bag format?','C','I'],
+    ['What is topic statistics in ROS2? How do you enable it?','T','I'],
+    ['What statistics are provided by topic statistics? What is jitter?','T','I'],
+    ['How do you use ros2 node info to inspect a node\'s publishers and subscribers?','C','B'],
+    ['How do you enable DDS logging to diagnose communication issues?','C','A'],
+    ['What is ros2 daemon? What does it do and when do you restart it?','T','I'],
+    ['How do you use GDB to debug a running C++ ROS2 node?','C','A'],
+    ['How do you attach GDB to a node launched by a launch file?','C','A'],
+    ['What is the sanitizer support in ROS2? How do you enable ASan for a node?','C','A'],
+    ['Debug: node is in the graph but no messages received. Systematic checklist.','D','I'],
+    ['How do you diagnose a QoS mismatch between publisher and subscriber?','D','I'],
+    ['How do you use ros2 doctor --report to get a full system health check?','C','I'],
+    ['What is the ros2 component list command?','C','I'],
+    ['How do you trace a specific callback with ros2_tracing?','C','A'],
+    ['Debug: action server receives goal but never sends result. Investigation.','D','I'],
+    ['How do you use valgrind with a ROS2 node to detect memory leaks?','C','A'],
+    ['What is the ekumen-os/ros2_profiling tool?','T','A'],
+  ]
+},
+{
+  id:'m19',phase:3,num:'19',icon:'🌐',title:'DDS Deep Dive',
+  desc:'DDS concepts, discovery, QoS, Fast DDS, CycloneDDS, multi-machine, WAN.',
+  qs:[
+    ['Explain the DCPS (Data-Centric Publish-Subscribe) model in DDS.','T','A'],
+    ['What is a DDS Domain? How does it map to ROS2 ROS_DOMAIN_ID?','T','I'],
+    ['What is a DataWriter and DataReader in DDS?','T','A'],
+    ['What is Simple Participant Discovery Protocol (SPDP)?','T','A'],
+    ['What is Simple Endpoint Discovery Protocol (SEDP)?','T','A'],
+    ['How does DDS discovery work on a LAN with multicast?','T','I'],
+    ['How do you configure DDS to use unicast when multicast is unavailable?','C','I'],
+    ['What is the DDS_DEFAULT_RELIABILITY_QOS? What does it map to in ROS2?','T','I'],
+    ['What is the DEADLINE QoS policy? How do you use it in ROS2?','T','I'],
+    ['What is LIVELINESS QoS? How is it different from DEADLINE?','T','A'],
+    ['What is OWNERSHIP QoS? What does strength mean?','T','A'],
+    ['How do you configure Fast DDS via an XML profile?','C','A'],
+    ['How do you enable shared memory transport in CycloneDDS?','C','A'],
+    ['How do you run ROS2 nodes across two machines on the same network?','C','I'],
+    ['How do you bridge ROS2 across networks using DDS router or zenoh bridge?','T','A'],
+    ['What is the Zenoh bridge for ROS2? How does it improve WAN connectivity?','T','A'],
+    ['How do you analyze DDS traffic with Wireshark?','C','A'],
+    ['What is content-filtered topic in DDS? Is it supported in ROS2?','T','A'],
+    ['How do you limit DDS discovery to a subnet in Fast DDS?','C','A'],
+    ['What is DataSharing in Fast DDS?','T','A'],
+    ['How does CycloneDDS handle message fragmentation for large payloads?','T','A'],
+    ['What is the DDS Security standard? What does it protect against?','T','A'],
+    ['How do you enable SROS2 (Secure ROS2) with DDS security?','C','A'],
+    ['What is the impact of Discovery Server vs Simple Discovery on large robot fleets?','T','A'],
+    ['How do you configure a Fast DDS Discovery Server?','C','A'],
+  ]
+},
+{
+  id:'m20',phase:3,num:'20',icon:'📟',title:'micro-ROS',
+  desc:'micro-ROS architecture, XRCE-DDS, FreeRTOS/Zephyr, agent, transports.',
+  qs:[
+    ['What is micro-ROS? What problem does it solve?','T','I'],
+    ['What is XRCE-DDS (eXtremely Resource-Constrained Environments DDS)?','T','I'],
+    ['What is the micro-ROS agent? What does it do?','T','I'],
+    ['What RTOS platforms does micro-ROS support?','T','I'],
+    ['How does micro-ROS integrate with FreeRTOS?','T','I'],
+    ['How does micro-ROS integrate with Zephyr RTOS?','T','I'],
+    ['What transport options does micro-ROS support?','T','I'],
+    ['How do you run the micro-ROS agent as a ROS2 node?','C','I'],
+    ['How do you create a micro-ROS publisher on a microcontroller?','C','I'],
+    ['How do you create a micro-ROS subscriber on a microcontroller?','C','I'],
+    ['How do you use micro-ROS with an Arduino/ESP32?','C','I'],
+    ['What is the micro-ROS build system? How do you add custom message types?','T','A'],
+    ['What is the memory model in micro-ROS? What is static memory allocation?','T','A'],
+    ['How do you configure micro-ROS for serial transport on STM32?','C','A'],
+    ['How do you configure micro-ROS for UDP transport on ESP32?','C','A'],
+    ['What are the limitations of micro-ROS compared to full ROS2?','T','I'],
+    ['How do you debug micro-ROS communication issues?','D','A'],
+    ['What is the rcl vs rclc API? Why is rclc used on microcontrollers?','T','A'],
+    ['What is rclc_executor? How does it differ from rclcpp executors?','T','A'],
+    ['How do you implement a micro-ROS service server?','C','A'],
+    ['How do you use time synchronization between micro-ROS and the agent?','T','A'],
+    ['What is the Raspberry Pi Pico + micro-ROS setup?','C','A'],
+    ['How do you handle QoS in micro-ROS? What profiles are available?','T','A'],
+    ['What is the micro-ROS + ROS2 bridge architecture for a mobile robot?','T','A'],
+    ['How do you monitor a micro-ROS node from a full ROS2 system?','C','A'],
+  ]
+},
+{
+  id:'m21',phase:3,num:'21',icon:'🔒',title:'SROS2 — ROS2 Security',
+  desc:'DDS security, SROS2 CLI, keystores, permissions, access control.',
+  qs:[
+    ['What is SROS2? What security features does it add to ROS2?','T','A'],
+    ['What DDS security standard does SROS2 use?','T','A'],
+    ['What is a keystore? How do you create one with ros2 security?','C','A'],
+    ['What are the security artifacts in SROS2?','T','A'],
+    ['How do you generate permissions for a ROS2 node?','C','A'],
+    ['What is the governance file in SROS2?','T','A'],
+    ['How do you enable SROS2 in a launch file?','C','A'],
+    ['What is the difference between encryption, authentication, and access control in SROS2?','T','A'],
+    ['How do you verify that two nodes are communicating securely?','C','A'],
+    ['What is the performance overhead of SROS2 encryption?','T','A'],
+    ['How do you troubleshoot a SROS2 permissions error?','D','A'],
+    ['What is the principle of least privilege in SROS2 context?','T','A'],
+    ['How do you add a new node to an existing SROS2 keystore?','C','A'],
+    ['What is the difference between a signed and encrypted DDS topic?','T','A'],
+    ['How does SROS2 handle certificate rotation?','T','A'],
+  ]
+},
+{
+  id:'m22',phase:3,num:'22',icon:'🔄',title:'ROS2 with Simulation (Gazebo)',
+  desc:'Ignition/Gazebo Harmonic, ros_gz_bridge, SDF, plugins, sensor simulation.',
+  qs:[
+    ['What is Gazebo Ignition (Harmonic)? How does it differ from Gazebo Classic?','T','I'],
+    ['What is the ros_gz_bridge package? How does it connect Gazebo and ROS2?','T','I'],
+    ['How do you bridge a Gazebo topic to a ROS2 topic?','C','I'],
+    ['What is an SDF file? How does it describe a robot in Gazebo?','T','I'],
+    ['How do you spawn a robot into Gazebo from a launch file?','C','I'],
+    ['What is the gz_ros2_control package?','T','I'],
+    ['How do you simulate a LiDAR sensor in Gazebo and receive it in ROS2?','C','I'],
+    ['How do you simulate an RGB camera and publish to image_transport?','C','I'],
+    ['What is the use_sim_time parameter? How does it synchronize simulation time?','T','I'],
+    ['How do you write a Gazebo plugin for a custom sensor?','C','A'],
+    ['What is the DiffDrive plugin? How do you configure it for a wheeled robot?','C','I'],
+    ['How do you implement hardware abstraction for sim vs real hardware?','T','I'],
+    ['How do you use Gazebo to test Nav2 navigation end-to-end?','C','I'],
+    ['What is the Isaac Sim alternative to Gazebo? How does it connect to ROS2?','T','A'],
+    ['Debug: robot in Gazebo drifts despite correct odometry plugin. Why?','D','I'],
+    ['How do you control Gazebo simulation speed (RTF) from ROS2?','C','I'],
+    ['What is the ros2_control framework? How does it abstract hardware interfaces?','T','I'],
+    ['What is a JointStatePublisher in simulation vs real hardware?','T','I'],
+    ['How do you implement a mock hardware interface for ros2_control?','C','A'],
+    ['How do you use rosbag playback in combination with Gazebo for testing?','C','A'],
+    ['What is the world file in Gazebo? What does it contain?','T','I'],
+    ['How do you add a custom world model to Gazebo from a ROS2 package?','C','I'],
+    ['What is the IMU sensor plugin in Gazebo? How do you configure noise?','C','I'],
+    ['How do you set up a multi-robot simulation in Gazebo with ROS2?','C','A'],
+    ['What is the performance difference between Gazebo Classic and Harmonic for dense environments?','T','A'],
+  ]
+},
+{
+  id:'m23',phase:3,num:'23',icon:'🧵',title:'ros2_control Framework',
+  desc:'Hardware interfaces, controllers, controller manager, URDF, real hardware.',
+  qs:[
+    ['What is ros2_control? What architecture does it use?','T','I'],
+    ['What is a HardwareInterface? What are the three types?','T','I'],
+    ['What is a SystemInterface? When is it used over ActuatorInterface?','T','I'],
+    ['What is the ControllerManager? What does it do?','T','I'],
+    ['How do you configure a robot\'s ros2_control in URDF?','C','I'],
+    ['What is a JointTrajectoryController?','T','I'],
+    ['What is a DiffDriveController? What topics does it expose?','T','I'],
+    ['What is a ForwardCommandController?','T','I'],
+    ['How do you spawn a controller with ros2 control load_controller?','C','I'],
+    ['How do you switch between active controllers at runtime?','C','A'],
+    ['What is the hardware lifecycle in ros2_control?','T','I'],
+    ['How do you implement a custom hardware interface for a serial motor driver?','C','A'],
+    ['What is realtime_tools::RealtimeBuffer? Why is it used?','T','A'],
+    ['How do you implement a PID position controller as a ros2_control controller?','C','A'],
+    ['What is the joint_state_broadcaster? What does it publish?','T','I'],
+    ['How do you integrate ros2_control with MoveIt2?','T','A'],
+    ['What is the transmission interface in ros2_control?','T','A'],
+    ['Debug: controller fails to activate. Common causes?','D','I'],
+    ['How do you handle async hardware communication in a HardwareInterface?','T','A'],
+    ['What is the resource manager in ros2_control?','T','A'],
+    ['How does ros2_control handle controller update rates vs hardware rates?','T','A'],
+    ['What is effort_controllers/JointGroupEffortController?','T','A'],
+    ['How do you implement force-torque sensor reading in ros2_control?','C','A'],
+    ['What is the chainable controller concept in ros2_control?','T','A'],
+    ['How do you test a ros2_control hardware interface without real hardware?','C','A'],
+  ]
+},
+{
+  id:'m24',phase:3,num:'24',icon:'🚁',title:'Multi-Robot & Fleet Systems',
+  desc:'Namespacing, multi-robot TF, fleet navigation, coordination, ROS2 on multiple machines.',
+  qs:[
+    ['How do you run two robots in the same ROS2 network without topic collision?','T','I'],
+    ['What is namespace remapping? How do you apply it in launch files?','C','I'],
+    ['How do you structure TF trees for two robots (robot1 and robot2)?','T','I'],
+    ['How do you launch Nav2 for two robots simultaneously?','C','A'],
+    ['What is the ROS2 Fleet Management approach?','T','A'],
+    ['How does DOMAIN_ID separation help with multi-robot isolation?','T','I'],
+    ['What is zenoh-bridge-ros2dds? How does it help multi-machine systems?','T','A'],
+    ['How do you implement a task allocator for a fleet of robots?','T','A'],
+    ['What is the Open-RMF (Robot Middleware Framework) project?','T','A'],
+    ['How do you share map data between robots in a multi-robot SLAM setup?','T','A'],
+    ['What is multi-master ROS2? How is it different from multi-machine same-domain?','T','A'],
+    ['How do you synchronize clocks between multiple ROS2 machines?','T','A'],
+    ['How do you implement decentralized multi-robot coordination?','T','A'],
+    ['What is a swarm in ROS2 context? How do you approach swarm coordination?','T','A'],
+    ['Debug: two robots interfere with each other\'s topics. Root cause and fix.','D','A'],
+    ['How do you implement a shared occupancy map for multi-robot navigation?','T','A'],
+    ['What is the ROS2 multi-robot simulator Webots scene?','T','A'],
+    ['How do you assign dynamic namespaces to robots at launch time?','C','A'],
+    ['What is the Fleet Adapter in Open-RMF?','T','A'],
+    ['How do you implement inter-robot communication without a central broker?','T','A'],
+    ['What is the race condition risk in multi-robot shared resources?','T','A'],
+    ['How do you handle robot failure in a fleet gracefully?','T','A'],
+    ['What is the nav2_simple_commander API? How does it simplify fleet control?','C','A'],
+    ['How do you visualize multiple robots in rviz2 simultaneously?','C','A'],
+    ['What is the difference between centralized vs decentralized fleet architectures?','T','A'],
+  ]
+},
+{
+  id:'m25',phase:3,num:'25',icon:'🏭',title:'ROS2 in Production',
+  desc:'Deployment, Docker, CI/CD, monitoring, cross-compilation, release management.',
+  qs:[
+    ['How do you containerize a ROS2 application with Docker?','C','A'],
+    ['What is the osrf/ros Docker image? How do you build on top of it?','C','A'],
+    ['How do you handle device access (GPIO, serial, CAN) inside a Docker container?','C','A'],
+    ['How do you cross-compile a ROS2 package for ARM from an x86 machine?','C','A'],
+    ['What is the ros_cross_compile tool?','T','A'],
+    ['How do you set up a GitHub Actions CI pipeline for a ROS2 package?','C','A'],
+    ['What is the ROS2 release process? What is bloom?','T','A'],
+    ['How do you create a debian package from a ROS2 package?','C','A'],
+    ['How do you deploy a ROS2 application as a systemd service?','C','A'],
+    ['What is the ROS2 lifecycle for production use? How do you manage node health?','T','A'],
+    ['How do you implement a watchdog for ROS2 nodes in production?','T','A'],
+    ['How do you monitor CPU and memory usage of a running ROS2 system?','C','A'],
+    ['What is ros2_diagnostics? How do you use it for health monitoring?','T','A'],
+    ['How do you implement structured logging for a production ROS2 system?','T','A'],
+    ['What is the colcon bundle tool? What does it produce?','T','A'],
+    ['How do you version-pin ROS2 dependencies for a production release?','T','A'],
+    ['What is rosdep? How do you use it to install system dependencies?','C','A'],
+    ['How do you reduce a ROS2 Docker image size for embedded deployment?','C','A'],
+    ['How do you implement graceful shutdown of a ROS2 application on SIGTERM?','C','A'],
+    ['What is the difference between ROS2 apt and pip dependencies in production?','T','A'],
+    ['How do you use environment hooks in a ROS2 package?','T','A'],
+    ['Debug: ROS2 node crashes after 12 hours in production. Investigation strategy.','D','A'],
+    ['How do you implement node restart policies in a production deployment?','T','A'],
+    ['What is the ROS2 Application Management pattern for production robots?','T','A'],
+    ['How do you run ROS2 without a graphical desktop on embedded hardware?','C','A'],
+  ]
+},
+];
+
+// ── State & persistence ────────────────────────────────────────────────
+const ST={};
+try{Object.assign(ST,JSON.parse(localStorage.getItem(SKEY)||'{}'));}catch(e){}
+function save(){try{localStorage.setItem(SKEY,JSON.stringify(ST));}catch(e){}}
+function k(mid,qi){return mid+'_'+qi;}
+function isChecked(mid,qi){return!!ST[k(mid,qi)];}
+function toggle(mid,qi){ST[k(mid,qi)]=!ST[k(mid,qi)];save();refreshAll(mid,qi);}
+
+// ── Stats ──────────────────────────────────────────────────────────────
+function modStats(m){let d=0;m.qs.forEach((_,i)=>{if(isChecked(m.id,i))d++;});return{done:d,total:m.qs.length};}
+function allStats(){let d=0,t=0,md=0;MODULES.forEach(m=>{const s=modStats(m);d+=s.done;t+=s.total;if(s.done===s.total&&s.total>0)md++;});return{done:d,total:t,modsDone:md};}
+
+function refreshAll(mid,qi){
+  // row
+  const row=document.getElementById('row-'+mid+'-'+qi);
+  if(row){const c=isChecked(mid,qi);row.className=c?'checked':'';const cc=row.querySelector('.cb-check');if(cc)cc.style.display=c?'block':'none';}
+  // module head
+  const m=MODULES.find(x=>x.id===mid);
+  const s=modStats(m);const pct=s.total?Math.round(s.done/s.total*100):0;
+  const fill=document.getElementById('mfill-'+mid);if(fill)fill.style.width=pct+'%';
+  const cnt=document.getElementById('mcnt-'+mid);if(cnt)cnt.textContent=s.done+'/'+s.total;
+  const badge=document.getElementById('mbadge-'+mid);
+  if(badge){if(pct===0){badge.className='mod-badge badge-ns';badge.textContent='Not started';}
+  else if(pct<100){badge.className='mod-badge badge-ip';badge.textContent=pct+'% done';}
+  else{badge.className='mod-badge badge-done';badge.textContent='Mastered ✓';}}
+  const ms=document.getElementById('ms-pct-'+mid);if(ms)ms.textContent=pct+'%';
+  const mpf=document.getElementById('ms-fill-'+mid);if(mpf)mpf.style.width=pct+'%';
+  // header stats
+  const as=allStats();const ap=as.total?Math.round(as.done/as.total*100):0;
+  document.getElementById('done-count').textContent=as.done;
+  document.getElementById('total-count').textContent=as.total;
+  document.getElementById('pct-label').textContent=ap+'%';
+  document.getElementById('mod-done').textContent=as.modsDone;
+  document.getElementById('overall-fill').style.width=ap+'%';
+  // nav btn
+  const btn=document.getElementById('nav-'+mid);
+  if(btn){btn.className='mod-btn'+(pct===100?' done':pct>0?' partial':'');}
+}
+
+// ── Phase filter ───────────────────────────────────────────────────────
+let curPhase=0;
+function filterPhase(p){
+  curPhase=p;
+  document.querySelectorAll('.phase-btn').forEach((b,i)=>b.className='phase-btn'+(i===p?' active':''));
+  renderContent();
+}
+
+// ── Render ─────────────────────────────────────────────────────────────
+function renderModNav(){
+  const as=allStats();
+  document.getElementById('s-total').textContent=as.total;
+  let h='';
+  MODULES.forEach(m=>{
+    const s=modStats(m);const p=s.total?Math.round(s.done/s.total*100):0;
+    h+=`<button id="nav-${m.id}" class="mod-btn${p===100?' done':p>0?' partial':''}" onclick="jumpToModule('${m.id}')">${m.num}</button>`;
+  });
+  document.getElementById('mod-nav').innerHTML=h;
+}
+
+function jumpToModule(id){
+  const el=document.getElementById('card-'+id);
+  if(el){el.scrollIntoView({behavior:'smooth',block:'start'});if(!el.classList.contains('open'))el.classList.add('open');}
+}
+
+function toggleModule(id){document.getElementById('card-'+id).classList.toggle('open');}
+
+function renderContent(){
+  const phases=curPhase===0?[1,2,3]:[curPhase];
+  const pl={1:'Phase 01 · Foundation',2:'Phase 02 · Intermediate',3:'Phase 03 · Advanced'};
+  const TM={'T':'theory','C':'code','D':'debug','S':'design'};
+  const TC={'T':'tag-theory','C':'tag-code','D':'tag-debug','S':'tag-design'};
+  const DM={'B':'Beginner','I':'Intermediate','A':'Advanced'};
+  const DC={'B':'diff-B','I':'diff-I','A':'diff-A'};
+  let h='';
+  phases.forEach(ph=>{
+    const mods=MODULES.filter(m=>m.phase===ph);
+    h+=`<div class="phase-header">${pl[ph]} — ${mods.length} modules</div>`;
+    mods.forEach(m=>{
+      const s=modStats(m);const pct=s.total?Math.round(s.done/s.total*100):0;
+      let bc='mod-badge badge-ns',bt='Not started';
+      if(pct>0&&pct<100){bc='mod-badge badge-ip';bt=pct+'% done';}
+      else if(pct===100){bc='mod-badge badge-done';bt='Mastered ✓';}
+      h+=`<div class="module" id="card-${m.id}">
+        <div class="module-head" onclick="toggleModule('${m.id}')">
+          <div class="module-num">${m.num}</div>
+          <div class="module-icon">${m.icon}</div>
+          <div class="module-info"><div class="module-title">${m.title}</div><div class="module-desc">${m.desc}</div></div>
+          <div class="module-right"><div class="mod-count" id="mcnt-${m.id}">${s.done}/${s.total}</div><div id="mbadge-${m.id}" class="${bc}">${bt}</div></div>
+          <div class="module-chevron">▶</div>
+        </div>
+        <div class="mod-bar"><div class="mod-bar-fill" id="mfill-${m.id}" style="width:${pct}%"></div></div>
+        <div class="module-body">
+          <div class="mod-stats">
+            <div class="ms">Done: <span>${s.done}</span></div>
+            <div class="ms">Total: <span>${s.total}</span></div>
+            <div class="ms">Progress: <span id="ms-pct-${m.id}">${pct}%</span></div>
+            <div class="mod-prog-bar"><div class="mod-prog-fill" id="ms-fill-${m.id}" style="width:${pct}%"></div></div>
+          </div>
+          <div class="q-table-wrap"><table>
+            <thead><tr><th>✓</th><th>#</th><th>Question</th><th>Type</th><th>Difficulty</th><th>Issue</th></tr></thead>
+            <tbody>`;
+      m.qs.forEach((q,qi)=>{
+        const c=isChecked(m.id,qi);
+        h+=`<tr id="row-${m.id}-${qi}" class="${c?'checked':''}" onclick="toggle('${m.id}',${qi})">
+          <td><div class="cb"><span class="cb-check" style="display:${c?'block':'none'}">✓</span></div></td>
+          <td class="q-num">${String(qi+1).padStart(3,'0')}</td>
+          <td class="q-text">${q[0]}</td>
+          <td><span class="tag ${TC[q[1]]}">${TM[q[1]]}</span></td>
+          <td><span class="diff ${DC[q[2]]}">${DM[q[2]]}</span></td>
+          <td class="issue-cell" onclick="event.stopPropagation()"><input class="issue-input" id="iss-${m.id}-${qi}" type="text" placeholder="#" value="${ST['iss_'+m.id+'_'+qi]||''}" oninput="saveIssue('${m.id}',${qi},this.value)" /><a id="issl-${m.id}-${qi}" class="issue-open ${ST['iss_'+m.id+'_'+qi]?'active':''}" href="${ST['iss_'+m.id+'_'+qi]?'https://github.com/'+GH_REPO+'/issues/'+ST['iss_'+m.id+'_'+qi]:'#'}" target="_blank">open</a></td>
+        </tr>`;
+      });
+      h+=`</tbody></table></div></div></div>`;
+    });
+  });
+  document.getElementById('content').innerHTML=h;
+}
+
+renderModNav();
+renderContent();
+// init stats display
+const as=allStats();const ap=as.total?Math.round(as.done/as.total*100):0;
+document.getElementById('done-count').textContent=as.done;
+document.getElementById('total-count').textContent=as.total;
+document.getElementById('pct-label').textContent=ap+'%';
+document.getElementById('mod-done').textContent=as.modsDone;
+document.getElementById('overall-fill').style.width=ap+'%';
+
+function saveIssue(mid, qi, val) {
+  const k = 'iss_' + mid + '_' + qi;
+  if (val.trim()) { ST[k] = val.trim(); } else { delete ST[k]; }
+  save();
+  // update link href and class live
+  const link = document.getElementById('issl-' + mid + '-' + qi);
+  if (link) {
+    if (val.trim()) {
+      link.href = 'https://github.com/' + GH_REPO + '/issues/' + val.trim();
+      link.className = 'issue-open active';
+    } else {
+      link.href = '#';
+      link.className = 'issue-open';
+    }
+  }
+}
+
+
+function saveIssue(mid, qi, val) {
+  const ik = 'iss_' + mid + '_' + qi;
+  if (val.trim()) { ST[ik] = val.trim(); } else { delete ST[ik]; }
+  save();
+  const link = document.getElementById('issl-' + mid + '-' + qi);
+  if (link) {
+    if (val.trim()) {
+      link.href = 'https://github.com/' + GH_REPO + '/issues/' + val.trim();
+      link.className = 'issue-open active';
+    } else {
+      link.href = '#';
+      link.className = 'issue-open';
+    }
+  }
+}
+
+</script>
+</body>
+</html>
